@@ -72,4 +72,11 @@ public class ProductService implements ProductServiceInterface {
         String sql = "DELETE FROM products WHERE id = ?";
         jdbcTemplate.update(sql, id);
     }
+
+    @Transactional
+    public void updateProductRating(Long productId, Double averageRating) {
+        Product product = getProductById(productId);
+        product.setAverageRating(averageRating);
+        productRepository.save(product);
+    }
 }
