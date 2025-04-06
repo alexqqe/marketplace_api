@@ -15,4 +15,6 @@ public class Product {
     private String description;
     private int price;
     private String category;
+    private int rating;
+    private int count; //кол-во пользователей оставивших рейтинг товара
 }
