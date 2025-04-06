@@ -1,0 +1,33 @@
+stages:
+  - test
+
+variables:
+  POSTGRES_USER: user
+  POSTGRES_PASSWORD: securepassword1337
+  POSTGRES_DB: mydatabase
+  SPRING_DATASOURCE_URL: jdbc:sqlite::resource:db/mydatabase.db
+  SPRING_DATASOURCE_USERNAME: $POSTGRES_USER
+  SPRING_DATASOURCE_PASSWORD: $POSTGRES_PASSWORD
+  SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+
+test-java-app:
+  stage: test
+  image: gradle:8.12.1-jdk21
+  tags:
+    - students-buildkit-medium
+  services:
+    - postgres:14
+  before_script:
+    - apt-get update && apt-get install -y wait-for-it
+    - wait-for-it postgres:5432 --timeout=30
+    - psql -h postgres -U $POSTGRES_USER -c "CREATE DATABASE $POSTGRES_DB;"
+  script:
+    - gradle test --info
+  artifacts:
+    paths:
+      - build/test-results/
+      - build/reports/
+    when: always
+  cache:
+    paths:
+      - .gradle/
