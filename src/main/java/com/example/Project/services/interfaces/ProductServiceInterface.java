@@ -11,6 +11,8 @@ import com.example.Project.model.entity.Product;
 import jakarta.validation.Valid;
 
 public interface ProductServiceInterface {
+    public void addRatingById(@PathVariable long id, @PathVariable int rating);
+
     public List<Product> readAllProducts();
 
     public void createProduct(@Valid @RequestBody ProductDto productDto);
