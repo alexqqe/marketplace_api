@@ -14,13 +14,11 @@ public class ReviewService {
     private final UserService userService;
 
     @Transactional
-    public ReviewDto createReview(CreateReviewRequest request, Long userId) {
-        // Проверяем, не оставлял ли пользователь уже отзыв на этот товар
+    public ReviewsDto createReview(CreateReviewRequest request, Long userId) {
         if (reviewRepository.existsByUserIdAndProductId(userId, request.getProductId())) {
             throw new IllegalStateException("User has already reviewed this product");
         }
 
-        // Проверяем валидность оценки
         if (request.getRating() < 1 || request.getRating() > 5) {
             throw new IllegalArgumentException("Rating must be between 1 and 5");
         }
@@ -36,7 +34,6 @@ public class ReviewService {
 
         Review savedReview = reviewRepository.save(review);
 
-        // Обновляем средний рейтинг товара
         updateProductAverageRating(product.getId());
 
         return convertToDto(savedReview);
@@ -68,7 +65,6 @@ public class ReviewService {
         Long productId = review.getProduct().getId();
         reviewRepository.delete(review);
 
-        // Обновляем средний рейтинг товара после удаления отзыва
         updateProductAverageRating(productId);
     }
 
