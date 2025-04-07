@@ -1,17 +1,18 @@
 package com.example.Project.model.Dto;
 
-import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@AllArgsConstructor
-@Getter
-@NotBlank
-@Setter
+@Data
 public class ProductDto {
+    private long id;
     private String name;
     private String description;
     private int price;
     private String category;
+    private Double averageRating;
+
+    public static class ReviewStats {
+        private Integer totalReviews;
+        private Double averageRating;
+    }
 }
