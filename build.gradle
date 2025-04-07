@@ -9,7 +9,7 @@ version = '0.0.1-SNAPSHOT'
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(23)
+		languageVersion = JavaLanguageVersion.of(21)
 	}
 }
 
@@ -35,6 +35,10 @@ dependencies {
 
 	implementation("org.xerial:sqlite-jdbc:3.42.0.0")
 	implementation("org.springframework.boot:spring-boot-starter-jdbc")
+
+	testImplementation("org.testcontainers:postgresql:1.17.6")
+	// Для интеграции с Junit5
+	testImplementation("org.testcontainers:junit-jupiter:1.17.6")
 
 }
 
