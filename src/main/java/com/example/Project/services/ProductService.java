@@ -22,6 +22,23 @@ public class ProductService implements ProductServiceInterface {
     }
 
     @Override
+    public void addRatingById(long id, int rating) {
+        Product curProduct = readProductById(id);
+        int oldRating = curProduct.getRating();
+        int oldRatingCount = curProduct.getCount();
+
+        int newRating = (oldRating + rating) / (oldRatingCount + 1);
+        ProductDto updatedProduct = new ProductDto(
+                curProduct.getName(),
+                curProduct.getDescription(),
+                curProduct.getPrice(),
+                curProduct.getCategory(),
+                newRating,
+                oldRatingCount + 1);
+        updateProductById(id, updatedProduct);
+    }
+
+    @Override
     public List<Product> readAllProducts() {
         String sql = "SELECT * FROM products";
         return jdbcTemplate.query(sql, (rs, rowNum) -> new Product(
@@ -29,7 +46,9 @@ public class ProductService implements ProductServiceInterface {
                 rs.getString("name"),
                 rs.getString("description"),
                 rs.getInt("price"),
-                rs.getString("category")));
+                rs.getString("category"),
+                rs.getInt("count"),
+                rs.getInt("rating")));
     }
 
     @Override
@@ -52,18 +71,22 @@ public class ProductService implements ProductServiceInterface {
                         rs.getString("name"),
                         rs.getString("description"),
                         rs.getInt("price"),
-                        rs.getString("category")),
-                id);
+                        rs.getString("category"),
+                        rs.getInt("count"),
+                        rs.getInt("rating")));
     }
 
     @Override
     public void updateProductById(long id, @Valid ProductDto product) {
-        String sql = "UPDATE products SET name = ?, description = ?, price = ?, category = ? WHERE id = ?";
+        String sql = "UPDATE products SET name = ?, description = ?, price = ?, category = ?, count = ?, rating = ?" +
+                " WHERE id = ?";
         jdbcTemplate.update(sql,
                 product.getName(),
                 product.getDescription(),
                 product.getPrice(),
                 product.getCategory(),
+                product.getCount(),
+                product.getRating(),
                 id);
     }
 

@@ -1,13 +1,22 @@
 package com.example.Project.model.Dto;
 
-import lombok.Data;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@AllArgsConstructor
+@Getter
+@Setter
 public class ProductDto {
-    private long id;
+    @NotBlank
     private String name;
     private String description;
+    @Min(value = 0)
     private int price;
+    @NotBlank
     private String category;
     private Double averageRating;
 
@@ -15,4 +24,8 @@ public class ProductDto {
         private Integer totalReviews;
         private Double averageRating;
     }
+    @Min(value = 0)
+    @Max(value = 5)
+    private int rating = 0;
+    private int count;
 }
